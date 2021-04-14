@@ -15,13 +15,13 @@ module.exports = (req,res,next) => {
         }
         jwt.verify(token,jwtLola, async (err,payload) => {
             if(err){
-                return res.send("error occured in line 17");
+                return res.send("error occured in line 17 authtoken.js");
             }
             const user =await User.findById(payload['userId']);
             req.user = user;
             next();
         })
     } catch (err) {
-        return res.send(" error occured in line 25");
+        return res.send(" error occured in line 25 authtoken.js");
     }
 }

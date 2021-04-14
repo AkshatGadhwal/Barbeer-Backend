@@ -1,6 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
+
+require('../models/User');
+const Shop = mongoose.model('Shop');
 const User = mongoose.model('User');
 const jwt = require('jsonwebtoken');
 const {jwtLola} = require('../componentPages/keys');
@@ -13,6 +16,10 @@ router.get('/',tokenAuthenticating, (req,res) => {
 router.get('/userData',tokenAuthenticating, (req,res) => {
     res.send(req.user);
 })
+router.get('/shopsData', async (req,res) => {
+    const shops = await Shop.find();
+    res.send(shops);
+})
 
 router.post("/signup",async (req,res) => {
     const {email,password} = req.body;
@@ -21,6 +28,23 @@ router.post("/signup",async (req,res) => {
         await user.save()
         const token = jwt.sign({userId : user._id},jwtLola);
         res.send({token});
+    } catch (error) {
+        return res.send("error occured in saving the data");
+    }
+});
+
+router.post("/addShop",async (req,res) => {
+    const {name,distance,rating,price} = req.body;
+    try {
+
+        await Shop.create({name:name,distance:distance,rating:rating, price:price}, function (err, small) {
+            if (err) {
+                console.log(err);
+            };
+        });
+
+        return res.send("shop added successfully");
+    
     } catch (error) {
         return res.send("error occured in saving the data");
     }

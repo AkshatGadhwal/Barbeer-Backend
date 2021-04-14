@@ -23,4 +23,27 @@ userSchema.methods.comparePassword = function(candidatePassword) {
     })
 };
 
-mongoose.model('User',userSchema);
+mongoose.model('User',userSchema,'users');
+
+const shopSchema = new mongoose.Schema({
+    name:{
+        type:String,
+        required:true,
+        index: true
+    },
+    price:{
+        type:String,
+        required:true,
+    },
+    rating:{
+        type:String,
+        required:true
+    },
+    distance:{
+        type:String,
+        required:true
+    }
+})
+
+
+mongoose.model('Shop',shopSchema,'shops');

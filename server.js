@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const server = express();
 const PORT = "3000";
-const hostname = "localhost";
+const hostname = "192.168.43.190";
 const {mongoURL} = require("./componentPages/keys");
 const routesAuth = require('./routes/auth');
 
@@ -17,9 +17,20 @@ mongoose.connect(mongoURL,{
     useUnifiedTopology:true
 })       
     
-mongoose.connection.on('connected',()=>{
-    console.log("connected to mongo yeahh")
+mongoose.connection.on('connected', async ()=>{
+    console.log("connected to mongo yeahh");
 })
+mongoose.connection.on('open', function(){
+    mongoose.connection.db.listCollections(function(error, names) {
+      if (error) {
+        throw new Error(error);
+      } else {
+        names.map(function(name) {
+          console.log('found collection %s', name);
+        });
+      }
+    });
+  });
 
 mongoose.connection.on('error',(err)=>{
 console.log("this is error",err)
